@@ -24,12 +24,12 @@ Type 'quit' if you want to stop the game.""")
 #Making a function that prints out your inventory and player status
 def see_inventory():
     for items in inventory:
-        print("You have a "+items+".")
+        print("You have a " + items + ".")
     if inventory == []:
         print("You have no items.")
-    print("Your attack is "+str(attack)+".")
-    print("You have "+str(gold)+" gold.")
-    print("You have "+str(health)+"/"+str(max_health)+" health.")
+    print("Your attack is " + str(attack) + ".")
+    print("You have " + str(gold) +" gold.")
+    print("You have " + str(health) + "/" + str(max_health) + " health.")
 
 #Function to add one gold to your inventory
 def modify_gold(amount_gold):
@@ -42,7 +42,7 @@ def heal_health(heal_amount):
     global max_health
     if health < max_health:
         health = health + heal_amount
-        print("You have "+str(health)+"/"+str(max_health)+" health.")
+        print("You have " + str(health) + "/" + str(max_health) + " health.")
     else:
         print("You're at your maximum health!")
 
@@ -57,7 +57,7 @@ def buy_a_weapon():
             gold = gold - 1
             inventory.append("rusty knife")
             global attack
-            attack = attack +1
+            attack = attack + 1
             print("""Thank you for your purchase!
             Your attack has increased by 1.
             """)
@@ -73,16 +73,16 @@ def buy_a_weapon():
 def train(train_amount):
     global attack
     attack = attack + train_amount
-    print("You have increased your attack level to "+str(attack)+".")
+    print("You have increased your attack level to " + str(attack) + ".")
 
 #Function to fight a goblin
 def fight_goblin():
     global attack
     global health
     goblin_health = 4 - attack
-    if goblin_health <=0:
+    if goblin_health <= 0:
         print("You defeated the goblin!")
-    elif goblin_health >0:
+    elif goblin_health > 0:
         goblin_outcome()
 #If you don't have enough attack to defeat the goblin:
 def goblin_outcome():
@@ -92,7 +92,7 @@ Do you want to flee or take damage to defeat the goblin?
 (type 'flee' or 'take damage')""")
     if fight_or_flight == "flee":
         global gold
-        if gold >=1:
+        if gold >= 1:
             modify_gold(-1)
             print("The goblin steals one of your gold!")
         print("You ran away from the goblin!")
@@ -100,10 +100,10 @@ Do you want to flee or take damage to defeat the goblin?
         #Using your health to defeat the goblin
         global health
         health = health - goblin_health
-        if health >0:
+        if health > 0:
             print("You defeated the goblin!")
             #If you try to use your health but don't have enough:
-        elif health <=0:
+        elif health <= 0:
             print("You don't have enough health!")
             print("GAME OVER")
     else:
@@ -123,7 +123,7 @@ while True:
         see_inventory()
     elif chosen_action == "2":
         modify_gold(1)
-        print("You have a total of "+str(gold)+" gold.")
+        print("You have a total of " + str(gold) + " gold.")
     elif chosen_action == "3":
         heal_health(1)
     elif chosen_action == "4":
@@ -132,7 +132,7 @@ while True:
         train(1)
     elif chosen_action == "6":
         fight_goblin()
-        if health <=0:
+        if health <= 0:
             break
     else:
         print("Please type a number from 1-6 to choose an action.")
