@@ -34,11 +34,11 @@ def modify_gold(amount_gold):
 	gold = gold + amount_gold
 
 #Function to gain back your health 
-def heal_health():
+def heal_health(heal_amount):
 	global health
 	global max_health
 	if health < max_health:
-		health = health + 1
+		health = health + heal_amount
 		print("You have "+str(health)+"/"+str(max_health)+" health.")
 	else:
 		print("You're at your maximum health!")
@@ -65,9 +65,9 @@ def buy_a_weapon():
 		buy_a_weapon()
 
 #Function that adds to your total attack
-def train():
+def train(train_amount):
 	global attack
-	attack = attack + 1
+	attack = attack + train_amount
 	print("You have increased your attack level to "+str(attack)+".")
 
 #Function to fight a goblin
@@ -120,11 +120,11 @@ while True:
 		modify_gold(1)
 		print("You have a total of "+str(gold)+" gold.")
 	elif chosen_action == "3":
-		heal_health()
+		heal_health(1)
 	elif chosen_action == "4":
 		buy_a_weapon()
 	elif chosen_action == "5":
-		train()
+		train(1)
 	elif chosen_action == "6":
 		fight_goblin()
 		if health <=0:
