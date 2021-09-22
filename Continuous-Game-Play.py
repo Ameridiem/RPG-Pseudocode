@@ -11,8 +11,11 @@ attack = 0
 #Health of a monster you can fight:
 goblin_health = 4
 #Making a tuple of all the possible actions you can choose from:
-possible_actions = ("1. See inventory", "2. Gain one gold",
-"3. Heal", "4. Buy a weapon", "5. Train", "6. Fight a goblin")
+possible_actions =  (
+                    "1. See inventory", "2. Gain one gold",
+                    "3. Heal", "4. Buy a weapon",
+                    "5. Train", "6. Fight a goblin"
+                    )
 #Welcoming the player and game introduction
 print("""Welcome to my RPG game!
 This game was inspired by the boardgame Above and Below.
@@ -55,7 +58,9 @@ def buy_a_weapon():
             inventory.append("rusty knife")
             global attack
             attack = attack +1
-            print("Thank you for your purchase! Your attack has increased by 1.")
+            print("""Thank you for your purchase!
+            Your attack has increased by 1.
+            """)
         elif gold <= 1:
             print("You don't have enough gold!")
     elif choice == "no":
