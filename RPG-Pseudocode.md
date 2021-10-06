@@ -15,7 +15,7 @@ Elixir (increases max health by 1)
 """When you fail the game: goes to a menu disaplaying, "Game Over" with a restart option."""
 
 
-"""A thin woman with a wooden staff and dark cloak approaches you, her face hidden in the shoadow of her hood. "I must ask something of you," she says. "My traveling companions betrayed me and stole a precious tome of knowledge.  It tells the legend of an ancient kingdom that ruled these lands long ago, and is the last of its kind. Could you please help me retrieve it?"
+"""A thin woman with a wooden staff and dark cloak approaches you, her face hidden in the shadow of her hood. "I must ask something of you," she says. "My traveling companions betrayed me and stole a precious tome of knowledge.  It tells the legend of an ancient kingdom that ruled these lands long ago, and is the last of its kind. Could you please help me retrieve it?"
 
   If you help the woman: you earn one reputation. The woman joins your party. She's very frail, but she will do her best to help. Gain two health, two more attack, and four gold
   If you refuse: you lose one reputation
@@ -35,7 +35,7 @@ Elixir (increases max health by 1)
   If you explore the city yourself: you find one potion, nothing much else around here.
 """
 
-"""Your party finds a tent set up underneath a massive face cut into the cave rock. The embers of a campfire still glow, and you assume the owner of the tent is nearby. It might be one of the betrayers the frail woman mentioned, but it is a squat, grey-skinned creature with round, red eyes and rows of spikes on its pack - it's a glogo.
+"""Your party finds a tent set up underneath a massive face cut into the cave rock. The embers of a campfire still glow, and you assume the owner of the tent is nearby. It might be one of the betrayers the frail woman mentioned, but it is a squat, grey-skinned creature with round, red eyes and rows of spikes on its back - it's a glogo.
   Loot his tent before he gets back: -2 reputation, three gold, one pocket knife (attack +1)
   Befriend the glogo: Glogo joins the party, max health +1 and attack +3
 """
