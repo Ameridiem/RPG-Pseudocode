@@ -3,7 +3,7 @@
 # October 5, 2021
 import random
 # Starting inventory for player:
-inventory = {"potions" : 0, "elixirs" : 0, "weapons": []}
+inventory = {"potions": 0, "elixirs": 0, "weapons": []}
 party = ["Yourself"]
 
 # Player stats at beginning of the game:
@@ -250,7 +250,8 @@ def buy_items():
                 elif gold < 5:
                     print("You don't have enough gold!")
         elif purchase_choice == "healing sword":
-            if "healing sword" not in inventory["weapons"] and "rusty knife" in inventory["weapons"]:
+            if "healing sword" not in inventory["weapons"] and
+            "rusty knife" in inventory["weapons"]:
                 if gold >= 20:
                     gold = gold - 20
                     inventory["weapons"].append("healing sword")
@@ -284,14 +285,14 @@ def buy_items():
                     print("You don't have enough gold!")
         elif purchase_choice == "potion":
             if gold >= 5:
-                inventory.update({"potions" : inventory["potions"] + 1})
+                inventory.update({"potions": inventory["potions"] + 1})
                 gold = gold - 5
                 print("Thank you for your purchase!")
             elif gold < 5:
                 print("You don't have enough gold!")
         elif purchase_choice == "elixir":
             if gold >= 15:
-                inventory.update({"elixirs" : inventory["elixirs"] + 1})
+                inventory.update({"elixirs": inventory["elixirs"] + 1})
                 gold = gold - 15
                 print("Thank you for your purchase!")
             elif gold < 15:
