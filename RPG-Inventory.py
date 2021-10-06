@@ -363,7 +363,7 @@ def choose_random_location():
 
 
 def gameplay():
-    """Funciton that starts the actual game-play"""
+    """Funciton that starts gameplay and inputs player choices"""
     while True:
         for choice in player_options:
             print(choice)
