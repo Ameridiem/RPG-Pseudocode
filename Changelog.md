@@ -36,3 +36,6 @@ v1.4:
 
 - Made changes to follow the python style guide
 - Bug fixes
+
+v1.5:
+- More bug fixes
