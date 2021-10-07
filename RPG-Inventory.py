@@ -143,7 +143,7 @@ def fight_goblin():
     """Fight a monster, game quits if you fail"""
     global attack
     global health
-    if "Healing sword" in inventory["weapons"]:
+    if "healing sword" in inventory["weapons"]:
         if health < max_health:
             health = health + 1
     goblin_health = 4 - attack
@@ -223,6 +223,9 @@ def buy_items():
             buy_items()
         if purchase_choice == "rusty knife":
             if "rusty knife" not in inventory["weapons"]:
+                if "healing sword" in inventory["weapons"]:
+                    print("Please select something we have in stock!")
+                    buy_items()
                 if gold >= 1:
                     gold = gold - 1
                     inventory["weapons"].append("rusty knife")
@@ -252,8 +255,8 @@ def buy_items():
                 elif gold < 5:
                     print("You don't have enough gold!")
         elif purchase_choice == "healing sword":
-            if ("healing sword" not in inventory["weapons"]
-            and "rusty knife" in inventory["weapons"]):
+            if ("healing sword" not in inventory["weapons"] and
+               "rusty knife" in inventory["weapons"]):
                 if gold >= 20:
                     gold = gold - 20
                     inventory["weapons"].append("healing sword")
@@ -378,6 +381,7 @@ def gameplay():
             use_potions()
         elif player_choice == "4":
             print("Thanks for playing!")
+            break
             break
         else:
             print("""Invalid input!
