@@ -1,43 +1,46 @@
-#CS 30: Continuous Game Play Assignment
-#Catherine McLellan
-#September 21, 2021
+# CS 30: Continuous Game Play Assignment
+# Catherine McLellan
+# September 21, 2021
 
-#Player status at the beginning of the game:
+# Player status at the beginning of the game:
 inventory = []
 gold = 1
 health = 2
 max_health = 2
 attack = 0
-#Health of a monster you can fight:
+# Health of a monster you can fight:
 goblin_health = 4
-#Making a tuple of all the possible actions you can choose from:
-possible_actions =  (
+# Making a tuple of all the possible actions you can choose from:
+possible_actions = (
                     "1. See inventory", "2. Gain one gold",
                     "3. Heal", "4. Buy a weapon",
                     "5. Train", "6. Fight a goblin"
-                    )
-#Welcoming the player and game introduction
+                   )
+# Welcoming the player and game introduction
 print("""Welcome to my RPG game!
 This game was inspired by the boardgame Above and Below.
 Type 'quit' if you want to stop the game.""")
 
-#Making a function that prints out your inventory and player status
+
 def see_inventory():
+    """Making a function that prints out your inventory and player status"""
     for items in inventory:
         print("You have a " + items + ".")
     if inventory == []:
         print("You have no items.")
     print("Your attack is " + str(attack) + ".")
-    print("You have " + str(gold) +" gold.")
+    print("You have " + str(gold) + " gold.")
     print("You have " + str(health) + "/" + str(max_health) + " health.")
 
-#Function to add one gold to your inventory
+
 def modify_gold(amount_gold):
+    """Function to add one gold to your inventory"""
     global gold
     gold = gold + amount_gold
 
-#Function to gain back your health 
+
 def heal_health(heal_amount):
+    """Function to gain back your health"""
     global health
     global max_health
     if health < max_health:
@@ -46,10 +49,9 @@ def heal_health(heal_amount):
     else:
         print("You're at your maximum health!")
 
-#Function that gives you the choice to purchase a rusty knife
-#In the RPG game, you can't get the same kind of weapon 
-# -> amount of weapons won't be an issue
+
 def buy_a_weapon():
+    """Function that gives you the choice to purchase a rusty knife"""
     choice = input("You can buy a rusty knife for 1 gold.")
     if choice == "yes":
         global gold
@@ -69,14 +71,16 @@ def buy_a_weapon():
         print("Not a valid answer! Please type 'yes' or 'no'.")
         buy_a_weapon()
 
-#Function that adds to your total attack
+
 def train(train_amount):
+    """Function that adds to your total attack"""
     global attack
     attack = attack + train_amount
     print("You have increased your attack level to " + str(attack) + ".")
 
-#Function to fight a goblin
+
 def fight_goblin():
+    """Fuction to fight a goblin"""
     global attack
     global health
     goblin_health = 4 - attack
@@ -84,8 +88,10 @@ def fight_goblin():
         print("You defeated the goblin!")
     elif goblin_health > 0:
         goblin_outcome()
-#If you don't have enough attack to defeat the goblin:
+
+
 def goblin_outcome():
+    """If you don't have enough attack to defeat the goblin"""
     goblin_health = 4 - attack
     fight_or_flight = input("""You don't have enough attack!
 Do you want to flee or take damage to defeat the goblin?
@@ -97,12 +103,12 @@ Do you want to flee or take damage to defeat the goblin?
             print("The goblin steals one of your gold!")
         print("You ran away from the goblin!")
     elif fight_or_flight == "take damage":
-        #Using your health to defeat the goblin
+        # Using your health to defeat the goblin
         global health
         health = health - goblin_health
         if health > 0:
             print("You defeated the goblin!")
-            #If you try to use your health but don't have enough:
+            # If you try to use your health but don't have enough:
         elif health <= 0:
             print("You don't have enough health!")
             print("GAME OVER")
@@ -110,8 +116,9 @@ Do you want to flee or take damage to defeat the goblin?
         print("Please type 'flee' or 'take damage'.")
         goblin_outcome()
 
-#Continuous gameplay and calling defined functions based on player's choice.
+
 while True:
+    """Continuous gameplay and calling functions from player's choice."""
     print("Type in a number to choose your action:")
     for i in possible_actions:
         print(i)
