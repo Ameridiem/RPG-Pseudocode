@@ -94,7 +94,7 @@ def see_inventory():
         if inventory["weapons"] == []:
             print("""You have no weapons!""")
         for weapon in inventory["weapons"]:
-            print(f"""You have a {inventory["weapons"]}.""")
+            print(f"""You have a {weapon}.""")
     print("""Your party: """ + ", ".join(map(str, party)))
     print("Your total attack is " + str(attack) + ".")
     print("You have " + str(gold) + " gold.")
@@ -148,19 +148,20 @@ def fight_goblin():
             health = health + 1
     goblin_health = 4 - attack
     if goblin_health <= 0:
-        print("You defeated the goblin!")
+        modify_gold(4)
+        print("You defeated the goblin and earned four gold!")
     elif goblin_health > 0:
         goblin_outcome()
 
 
 def goblin_outcome():
     """If the player doesn't have enough attack to defeat the goblin"""
+    global gold
     goblin_health = 4 - attack
     fight_or_flight = input("""You don't have enough attack!
 Do you want to flee or take damage to defeat the goblin?
 (type 'flee' or 'take damage')""")
     if fight_or_flight == "flee":
-        global gold
         gold_stolen = random.choice(range(1, 4))
         if gold >= gold_stolen:
             gold_stolen = 0 - gold_stolen
@@ -172,7 +173,8 @@ Do you want to flee or take damage to defeat the goblin?
         global health
         health = health - goblin_health
         if health > 0:
-            print("You defeated the goblin!")
+            modify_gold(5)
+            print("You defeated the goblin and earned five gold!")
             # If you try to use your health but don't have enough:
         elif health <= 0:
             print("You can't beat the goblin!")
@@ -250,8 +252,8 @@ def buy_items():
                 elif gold < 5:
                     print("You don't have enough gold!")
         elif purchase_choice == "healing sword":
-            if "healing sword" not in inventory["weapons"] and
-            "rusty knife" in inventory["weapons"]:
+            if ("healing sword" not in inventory["weapons"]
+            and "rusty knife" in inventory["weapons"]):
                 if gold >= 20:
                     gold = gold - 20
                     inventory["weapons"].append("healing sword")
