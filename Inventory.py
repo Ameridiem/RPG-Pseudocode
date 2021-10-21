@@ -1,5 +1,5 @@
 # Catherine McLellan
-# Inventory and additional characters
+# Inventory and characters
 # CS 30
 # Oct. 20, 2021
 import Locations
