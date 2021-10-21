@@ -39,6 +39,7 @@ v1.4:
 
 v1.5:
 - More bug fixes
+<<<<<<< HEAD
 
 
 /////////////////RPG-Modules-and-Maps.py/////////////////
@@ -72,3 +73,5 @@ v1.5:
 - Bug fixes
 - Checked PEP8
 - Fixed recursion issue
+=======
+>>>>>>> origin/main
