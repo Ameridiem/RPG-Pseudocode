@@ -14,7 +14,7 @@ v1.2:
 -Pushed (this) changelog from Replit
 -Fixed errors in Python Style Guide
 
-////////////////////RPG-Inventory.py////////////////////
+/////////////////////RPG-Inventory.py/////////////////////
 
 v1.0:
 
@@ -37,7 +37,10 @@ v1.4:
 - Made changes to follow the python style guide
 - Bug fixes
 
-<<<<<<< HEAD
+v1.5:
+- More bug fixes
+
+
 /////////////////RPG-Modules-and-Maps.py/////////////////
 
 v1.0:
@@ -69,7 +72,3 @@ v1.5:
 - Bug fixes
 - Checked PEP8
 - Fixed recursion issue
-=======
-v1.5:
-- More bug fixes
->>>>>>> origin/main
