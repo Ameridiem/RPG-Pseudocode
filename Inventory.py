@@ -3,7 +3,7 @@
 # CS 30
 # Oct. 20, 2021
 import Locations
-import Gameplay
+import Map
 
 weapon = {
     "rusty knife":
@@ -43,7 +43,7 @@ healing_stuff = {
         "Cost: ": "15 gold."}
 }
 
-party = ["Yourself"]
+party = []
 
 characters = {
     "Frail Woman":
@@ -84,7 +84,10 @@ def see_inventory():
             print("""You have no weapons!""")
         for weapon in inventory["weapons"]:
             print(f"""You have a {weapon}.""")
-    print("""Your party: """ + ", ".join(map(str, party)))
+    if party == []:
+        print("You're all alone...")
+    else:
+        print("""Allies: """ + ", ".join(map(str, party)))
     print("Your total attack is " + str(Locations.attack) + ".")
     print("You have " + str(Locations.gold) + " gold.")
     print("You have " + str(health) + "/" + str(max_health) + " health.")
@@ -113,8 +116,40 @@ def use_potions():
         elif inventory["elixirs"] == 0:
             print("You don't have any elixirs!")
     elif heal_item_to_use == "explore":
-        Gameplay.gameplay()
+        gameplay()
     else:
         print("""Invalid input!
 Please type 'potion', 'elixir', or 'explore'.""")
         use_potions()
+
+
+options = "1. Explore", "2. See inventory", "3. Heal", "4. See map", "5. Quit"
+
+
+def gameplay():
+    """Funciton that starts gameplay and inputs player choices"""
+    while True:
+        for choice in options:
+            print(choice)
+        try:
+            player_choice = float(input("Which action do you wish to choose?"))
+            if player_choice == 1:
+                Map.move_choice()
+            elif player_choice == 2:
+                see_inventory()
+            elif player_choice == 3:
+                use_potions()
+            elif player_choice == 4:
+                Map.update_game_map()
+            elif player_choice == 5:
+                print("Thanks for playing!")
+                break
+            elif player_choice > 5:
+                print("Invalid input!")
+        except ValueError:
+            print("""Invalid input!
+Please press a number for your chosen action.""")
+        if health <= 0:
+            print("You're out of health!")
+            print("GAME OVER")
+            break

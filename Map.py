@@ -99,40 +99,35 @@ def move_choice():
     # Repeats loop until user puts in a valid answer
     while not valid_input:
         direction = input("Do you want to go north, south, east, or west?")
-        if direction == "north":
-            row = row - 1
-            valid_input = True
-        elif direction == "south":
-            row = row + 1
-            valid_input = True
-        elif direction == "east":
-            column = column + 1
-            valid_input = True
-        elif direction == "west":
-            column = column - 1
-            valid_input = True
+        try:
+            if direction == "north":
+                row = row - 1
+            elif direction == "south":
+                row = row + 1
+            elif direction == "east":
+                column = column + 1
+            elif direction == "west":
+                column = column - 1
+            else:
+                print("Invalid input!")
+            if row < 0:
+                row = row + 1
+                raise IndexError
+            elif row > 4:
+                row = row - 1
+                raise IndexError
+            elif column < 0:
+                column = column + 1
+                raise IndexError
+            elif column > 4:
+                column = column - 1
+                raise IndexError
+        except IndexError:
+            print("You can't go in this direction!")
         else:
-            print("Invalid input!")
-    # Resetting coordinates and notifying user when they're off the map
-    if column < 0:
-        column = column + 1
-        location_list2[row][column] = " You're here"
-        print("You can't go in this direction!")
-    elif row < 0:
-        row = row + 1
-        location_list2[row][column] = " You're here"
-        print("You can't go in this direction!")
-    elif column > 4:
-        column = column - 1
-        location_list2[row][column] = " You're here"
-        print("You can't go in this direction!")
-    elif row > 4:
-        row = row - 1
-        location_list2[row][column] = " You're here"
-        print("You can't go in this direction!")
-    else:
-        print_command = 1
-        player_location()
-        location_list2[row][column] = " You're here"
-        update_game_map()
-        print_command = 0
+            print_command = 1
+            player_location()
+            location_list2[row][column] = " You're here"
+            update_game_map()
+            print_command = 0
+            valid_input = True

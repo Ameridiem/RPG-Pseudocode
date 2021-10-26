@@ -1,4 +1,6 @@
-/////////////////Continuous-Game-Play.py/////////////////
+==============================================================
+
+Continuous-Game-Play.py
 
 v1.0:
 - This is the first version
@@ -14,7 +16,9 @@ v1.2:
 -Pushed (this) changelog from Replit
 -Fixed errors in Python Style Guide
 
-/////////////////////RPG-Inventory.py/////////////////////
+==============================================================
+
+RPG-Inventory.py
 
 v1.0:
 
@@ -41,8 +45,9 @@ v1.5:
 - More bug fixes
 <<<<<<< HEAD
 
+==============================================================
 
-/////////////////RPG-Modules-and-Maps.py/////////////////
+RPG-Modules-and-Maps.py
 
 v1.0:
 
@@ -73,5 +78,10 @@ v1.5:
 - Bug fixes
 - Checked PEP8
 - Fixed recursion issue
-=======
+
+v1.6 (Different assignment):
+- Added exception handling
+- Bug fixes
+
+====================================================================
 >>>>>>> origin/main

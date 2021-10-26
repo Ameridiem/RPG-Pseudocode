@@ -43,29 +43,31 @@ def goblin_outcome():
     """If the player doesn't have enough attack to defeat the goblin"""
     global gold
     goblin_health = 4 - attack
+    valid_input = False
     fight_or_flight = input("""You don't have enough attack!
 Do you want to flee or take damage to defeat the goblin?
 (type 'flee' or 'take damage')""")
-    if fight_or_flight == "flee":
-        gold_stolen = random.choice(range(1, 4))
-        if gold >= gold_stolen:
-            gold_stolen = 0 - gold_stolen
-            modify_gold(gold_stolen)
-            print("The goblin stole some gold!")
-        print("You ran away from the goblin!")
-    elif fight_or_flight == "take damage":
-        # Using your health to defeat the goblin
-        Inventory.health = Inventory.health - goblin_health
-        if Inventory.health > 0:
-            modify_gold(5)
-            print("You defeated the goblin and earned five gold!")
+    while not valid_input:
+        if fight_or_flight == "flee":
+            gold_stolen = random.choice(range(1, 4))
+            if gold >= gold_stolen:
+                gold_stolen = 0 - gold_stolen
+                modify_gold(gold_stolen)
+                print("The goblin stole some gold!")
+            print("You ran away from the goblin!")
+            valid_input = True
+        elif fight_or_flight == "take damage":
+            # Using your health to defeat the goblin
+            Inventory.health = Inventory.health - goblin_health
+            if Inventory.health > 0:
+                modify_gold(5)
+                print("You defeated the goblin and earned five gold!")
             # If you try to use your health but don't have enough:
-        elif Inventory.health <= 0:
-            print("You can't beat the goblin!")
-    else:
-        print("Please type 'flee' or 'take damage'.")
-        goblin_outcome()
-
+            elif Inventory.health <= 0:
+                print("You can't beat the goblin!")
+            valid_input = True
+        else:
+            fight_or_flight = input("Please type 'flee' or 'take damage'.")
 
 def witch():
     """Witch decreases max health by 1"""
@@ -92,17 +94,19 @@ def print_organized(item, indenting=-5):
 def purchase_item(item, cost):
     """If the player decides to purchase a potion or an elixir"""
     global gold
+    global valid_input
     if gold >= cost:
         Inventory.inventory.update({item: Inventory.inventory[item] + 1})
         gold = gold - cost
         print("Thank you for your purchase!")
+        valid_input = True
     elif gold < cost:
         print("You don't have enough gold!")
-        buy_items()
 
 
 def purchase_weapon(weapon, cost, attack_stat):
     """If the player decides to purchase a weapon"""
+    global valid_input
     global gold
     global attack
     if gold >= cost:
@@ -111,12 +115,16 @@ def purchase_weapon(weapon, cost, attack_stat):
         attack = attack + attack_stat
         del(Inventory.weapon[weapon])
         print("Thank you for your purchase!")
+        valid_input = True
     elif gold < cost:
         print("You don't have enough gold!")
 
 
 def buy_items():
     """Gives the player the option to purchase an item."""
+    global gold
+    global attack
+    global valid_input
     print("Market Inventory:")
     if ("rusty knife" not in Inventory.weapon and "healing sword"
        not in Inventory.inventory["weapons"]):
@@ -124,19 +132,19 @@ def buy_items():
     print_organized(Inventory.weapon)
     print_organized(Inventory.healing_stuff)
     print("")
-    choice = input("Would you like to make a purchase?")
-    if choice == "yes":
-        global gold
-        global attack
-        purchase_choice = input("What would you like to purchase?")
-        if purchase_choice not in Inventory.weapon:
-            print("Please select a weapon we have in stock!")
-            buy_items()
+    valid_input = False
+    while not valid_input:
+        purchase_choice = input("""What would you like to purchase?
+(Type 'no' if you do not want to buy anything)""")
+        if purchase_choice != 'no':
+            if (purchase_choice not in Inventory.weapon and
+               purchase_choice not in Inventory.healing_stuff):
+                print("Sorry, we don't have that item.")
+                continue
         if purchase_choice == "rusty knife":
             if "rusty knife" not in Inventory.inventory["weapons"]:
                 if "healing sword" in Inventory.inventory["weapons"]:
                     print("Please select something we have in stock!")
-                    buy_items()
                 purchase_weapon("rusty knife", 1, 1)
         elif purchase_choice == "pocket knife":
             purchase_weapon("pocket knife", 2, 2)
@@ -144,34 +152,31 @@ def buy_items():
             purchase_weapon("dagger", 5, 3)
         elif purchase_choice == "healing sword":
             if ("healing sword" not in Inventory.inventory["weapons"] and
-               "rusty knife" in Inventory.inventory["weapons"]):
+            "rusty knife" in Inventory.inventory["weapons"]):
                 if gold >= 20:
                     gold = gold - 20
                     Inventory.inventory["weapons"].append("healing sword")
                     attack = attack + 6
                     Inventory.inventory["weapons"].remove("rusty knife")
-                    Inventory.weapon.pop("Healing sword")
+                    Inventory.weapon.pop("healing sword")
                     print("Thank you for your purchase!")
+                    valid_input = True
                 elif gold < 20:
                     print("You don't have enough gold!")
             else:
                 print("You can't purchase this weapon!")
         elif purchase_choice == "rusty broadsword":
             purchase_weapon("rusty broadsword", 8, 4)
+            valid_input = True
         elif purchase_choice == "broadsword":
             purchase_weapon("broadsword", 15, 4)
         elif purchase_choice == "potion":
             purchase_item("potions", 5)
-        elif purchase_choice == "elixirs":
+        elif purchase_choice == "elixir":
             purchase_item("elixirs", 15)
-        else:
-            print("I don't understand your request!")
-            buy_items()
-    elif choice == "no":
-        print("Thank you for your time!")
-    else:
-        print("Not a valid answer! Please type 'yes' or 'no'.")
-        buy_items()
+        elif purchase_choice == "no":
+                print("Thank you for your time!")
+                valid_input = True
 
 
 def characters_organized(d, indent=0):
