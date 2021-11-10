@@ -110,6 +110,7 @@ def move_choice():
                 column = column - 1
             else:
                 print("Invalid input!")
+                continue
             if row < 0:
                 row = row + 1
                 raise IndexError

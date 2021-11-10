@@ -5,8 +5,6 @@
 import Inventory
 import random
 
-gold = 0
-attack = 0
 
 locations = {
     "Gold": "You found some gold!",
@@ -19,19 +17,17 @@ locations = {
 
 def modify_gold(amount_gold):
     """Modifies player's gold"""
-    global gold
-    gold = gold + amount_gold
+    Inventory.gold = Inventory.gold + amount_gold
     if amount_gold >= 1:
         print(f"""You found {amount_gold} gold!""")
 
 
 def fight_goblin():
     """Fight a monster, game quits if you fail"""
-    global attack
-    if "healing sword" in Inventory.inventory["weapons"]:
+    if "healing sword" in Inventory.weapons:
         if Inventory.health < Inventory.max_health:
             Inventory.health = Inventory.health + 1
-    goblin_health = 4 - attack
+    goblin_health = 4 - Inventory.attack
     if goblin_health <= 0:
         modify_gold(4)
         print("You defeated the goblin and earned four gold!")
@@ -41,8 +37,7 @@ def fight_goblin():
 
 def goblin_outcome():
     """If the player doesn't have enough attack to defeat the goblin"""
-    global gold
-    goblin_health = 4 - attack
+    goblin_health = 4 - Inventory.attack
     valid_input = False
     fight_or_flight = input("""You don't have enough attack!
 Do you want to flee or take damage to defeat the goblin?
@@ -50,7 +45,7 @@ Do you want to flee or take damage to defeat the goblin?
     while not valid_input:
         if fight_or_flight == "flee":
             gold_stolen = random.choice(range(1, 4))
-            if gold >= gold_stolen:
+            if Inventory.gold >= gold_stolen:
                 gold_stolen = 0 - gold_stolen
                 modify_gold(gold_stolen)
                 print("The goblin stole some gold!")
@@ -69,6 +64,7 @@ Do you want to flee or take damage to defeat the goblin?
         else:
             fight_or_flight = input("Please type 'flee' or 'take damage'.")
 
+
 def witch():
     """Witch decreases max health by 1"""
     print(locations["Witch"])
@@ -78,138 +74,159 @@ def witch():
     return Inventory.max_health
 
 
-def print_organized(item, indenting=-5):
-    """Organizing print for nested dictionaries"""
-    if type(item) == dict:
-        print('')
-        indenting += 5
-        for attributes in item:
-            print(indenting * ' ', end='')
-            print(attributes.title(), end='')
-            print_organized(item[attributes], indenting)
-    else:
-        print(item)
+def print_market_list(item):
+    """Printing market inventory"""
+    item_list = []
+    for item in Inventory.classes:
+        try:
+            if None:
+                continue
+            item_list = vars(item)
+            print(item_list['name'].title())
+            for item in item_list:
+                if item == "name":
+                    continue
+                if item == "list_placement":
+                    continue
+                if item == "quantity":
+                    continue
+                print(f"    {item.title()}", end='')
+                print(f": {item_list[item]}")
+        except TypeError:
+            pass
 
 
-def purchase_item(item, cost):
+def purchase_item(item, variable):
     """If the player decides to purchase a potion or an elixir"""
-    global gold
     global valid_input
-    if gold >= cost:
-        Inventory.inventory.update({item: Inventory.inventory[item] + 1})
-        gold = gold - cost
-        print("Thank you for your purchase!")
+    valid_amount = False
+    while not valid_amount:
+        try:
+            amount = int(input("How many?"))
+        except ValueError:
+            print("Please enter a number!")
+        else:
+            valid_amount = True
+            total_price = item.price * amount
+        print("That will be", total_price, "gold.")
+        valid_choice = False
+        while not valid_choice:
+            choice = input("Would you like to make your purchase?")
+            if choice == "yes":
+                if Inventory.gold >= total_price:
+                    variable = variable + amount
+                    Inventory.gold = Inventory.gold - total_price
+                    print("Thank you for your purchase!")
+                    valid_choice = True
+                elif Inventory.gold < total_price:
+                    print("You don't have enough gold!")
+                    valid_choice = True
+            elif choice == "no":
+                print("Thank you for your time!")
+                valid_choice = True
+            else:
+                print("Invalid input!")
         valid_input = True
-    elif gold < cost:
-        print("You don't have enough gold!")
+        return variable
 
 
-def purchase_weapon(weapon, cost, attack_stat):
+def purchase_weapon(weapon):
     """If the player decides to purchase a weapon"""
     global valid_input
-    global gold
-    global attack
-    if gold >= cost:
-        Inventory.inventory["weapons"].append(weapon)
-        gold = gold - cost
-        attack = attack + attack_stat
-        del(Inventory.weapon[weapon])
+    if Inventory.gold >= weapon.price:
+        Inventory.weapons.append(weapon.name)
+        Inventory.gold = Inventory.gold - weapon.price
+        Inventory.attack = Inventory.attack + weapon.damage
+        Inventory.classes[weapon.list_placement] = None
         print("Thank you for your purchase!")
         valid_input = True
-    elif gold < cost:
+    elif Inventory.gold < weapon.price:
         print("You don't have enough gold!")
 
 
 def buy_items():
     """Gives the player the option to purchase an item."""
-    global gold
-    global attack
     global valid_input
+    global potions
+    global elixirs
     print("Market Inventory:")
-    if ("rusty knife" not in Inventory.weapon and "healing sword"
-       not in Inventory.inventory["weapons"]):
-        Inventory.weapon.update(Inventory.special_weapon)
-    print_organized(Inventory.weapon)
-    print_organized(Inventory.healing_stuff)
-    print("")
+    if "rusty knife" in Inventory.weapons:
+            Inventory.classes[5] = Inventory.HealingSword()
+    elif "healing sword" in Inventory.weapons:
+        Inventory.classes[5] = ""
+    print_market_list(Inventory.classes)
     valid_input = False
     while not valid_input:
         purchase_choice = input("""What would you like to purchase?
 (Type 'no' if you do not want to buy anything)""")
-        if purchase_choice != 'no':
-            if (purchase_choice not in Inventory.weapon and
-               purchase_choice not in Inventory.healing_stuff):
-                print("Sorry, we don't have that item.")
-                continue
         if purchase_choice == "rusty knife":
-            if "rusty knife" not in Inventory.inventory["weapons"]:
-                if "healing sword" in Inventory.inventory["weapons"]:
+            if "rusty knife" not in Inventory.weapons:
+                if "healing sword" in Inventory.weapons:
                     print("Please select something we have in stock!")
-                purchase_weapon("rusty knife", 1, 1)
+                purchase_weapon(Inventory.RustyKnife())
+            else:
+                print("Sorry, we don't have this in stock.")
         elif purchase_choice == "pocket knife":
-            purchase_weapon("pocket knife", 2, 2)
+            purchase_weapon(Inventory.PocketKnife())
         elif purchase_choice == "dagger":
-            purchase_weapon("dagger", 5, 3)
+            purchase_weapon(Inventory.Dagger())
         elif purchase_choice == "healing sword":
-            if ("healing sword" not in Inventory.inventory["weapons"] and
-            "rusty knife" in Inventory.inventory["weapons"]):
-                if gold >= 20:
-                    gold = gold - 20
-                    Inventory.inventory["weapons"].append("healing sword")
-                    attack = attack + 6
-                    Inventory.inventory["weapons"].remove("rusty knife")
-                    Inventory.weapon.pop("healing sword")
+            if ("healing sword" not in Inventory.weapons and
+               "rusty knife" in Inventory.weapons):
+                if Inventory.gold >= 20:
+                    Inventory.gold = Inventory.gold - 20
+                    Inventory.weapons.append("healing sword")
+                    Inventory.attack = Inventory.attack + 6
+                    Inventory.weapons.remove("rusty knife")
                     print("Thank you for your purchase!")
                     valid_input = True
-                elif gold < 20:
+                elif Inventory.gold < 20:
                     print("You don't have enough gold!")
             else:
                 print("You can't purchase this weapon!")
         elif purchase_choice == "rusty broadsword":
-            purchase_weapon("rusty broadsword", 8, 4)
+            purchase_weapon(Inventory.RustyBroadsword())
             valid_input = True
         elif purchase_choice == "broadsword":
-            purchase_weapon("broadsword", 15, 4)
+            purchase_weapon(Inventory.Broadsword())
         elif purchase_choice == "potion":
-            purchase_item("potions", 5)
+            Inventory.potions = purchase_item(Inventory.Potion(),
+                                              Inventory.potions)
         elif purchase_choice == "elixir":
-            purchase_item("elixirs", 15)
+            Inventory.elixirs = purchase_item(Inventory.Elixir(),
+                                              Inventory.elixirs)
         elif purchase_choice == "no":
                 print("Thank you for your time!")
                 valid_input = True
-
-
-def characters_organized(d, indent=0):
-    """Organizing character lists"""
-    s = ""
-    for key, value in d.items():
-        s += '\t' * indent + str(key)
-        if isinstance(value, dict):
-            characters_organized(value, indent+1)
         else:
-            s += '\t' * (indent+1) + str(value) + "\n"
+            print("Sorry, we don't have that item.")
+
+
+def add_characters(character, indent=0):
+    """Adding character to the party"""
+    Inventory.attack += character["attack"]
+    Inventory.max_health += character["health"]
+    s = ""
+    for key, value in character.items():
+        if key != "description":
+            continue
+        s += '\t' * indent + key.title() + ": " + value
     return s
 
 
 def new_ally():
     """A new ally will join the party! (In a certain order)"""
-    global attack
     if "Frail Woman" not in Inventory.party:
         Inventory.party.append("Frail Woman")
         print("A frail woman has joined your party!\n" +
-              characters_organized(Inventory.characters["Frail Woman"]))
-        attack = attack + 2
-        Inventory.max_health = Inventory.max_health + 2
+              add_characters(vars(Inventory.FrailWoman())))
     elif "Glogo" not in Inventory.party:
         Inventory.party.append("Glogo")
         print("A glogo has joined your party!\n" +
-              characters_organized(Inventory.characters["Glogo"]))
-        attack = attack + 3
-        Inventory.max_health = Inventory.max_health + 1
+              add_characters(vars(Inventory.Glogo())))
     elif "Cat" not in Inventory.party:
         Inventory.party.append("Cat")
         print("A cat has joined your party!\n" +
-              characters_organized(Inventory.characters["Cat"]))
-        attack = attack + 4
-    elif Inventory.party == ["Yourself", "Frail Woman", "Glogo", "Cat"]:
+              add_characters(vars(Inventory.Cat())))
+    elif Inventory.party == ["Frail Woman", "Glogo", "Cat"]:
         print("All of the characters have joined your party!")

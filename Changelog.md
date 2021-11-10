@@ -83,5 +83,10 @@ v1.6 (Different assignment):
 - Added exception handling
 - Bug fixes
 
+v1.7 (Different assignment):
+- Changed weapons and items into classes
+- Bug fixes
+- Checked python style
+
 ====================================================================
 >>>>>>> origin/main
