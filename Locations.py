@@ -8,11 +8,29 @@ import random
 
 locations = {
     "Gold": "You found some gold!",
-    "Monster": "Fight a goblin!",
+    "Monster": "Fight a monster!",
     "Witch": "Witch steals a health!",
     "Market": "Purchase weapons or healing items!",
     "New ally!": "New character joins party!"
 }
+
+
+class Monster:
+    def __init__(self, name, health, damage, loot):
+        self.name = name
+        self.health = health
+        self.damage = damage
+        self.loot = loot
+
+    def __str__(self):
+        return self.name
+
+goblin = Monster("goblin", 5, 2, 5)
+troll = Monster("troll", 10, 4, 10)
+imp = Monster("imp", 20, 7, 15)
+lesser_demon = Monster("lesser demon", 35, 7, 20)
+
+monsters = (goblin, troll, imp, lesser_demon)
 
 
 def modify_gold(amount_gold):
@@ -22,44 +40,67 @@ def modify_gold(amount_gold):
         print(f"""You found {amount_gold} gold!""")
 
 
-def fight_goblin():
+def fight_monster():
     """Fight a monster, game quits if you fail"""
-    if "healing sword" in Inventory.weapons:
-        if Inventory.health < Inventory.max_health:
-            Inventory.health = Inventory.health + 1
-    goblin_health = 4 - Inventory.attack
-    if goblin_health <= 0:
-        modify_gold(4)
-        print("You defeated the goblin and earned four gold!")
-    elif goblin_health > 0:
-        goblin_outcome()
+    monster_to_fight = random.choice(monsters)
+    print("The {} has {} health and does {} damage".format(monster_to_fight,
+          monster_to_fight.health, monster_to_fight.damage))
+    fight_or_flight = input("""\
+Do you want to fight the {} or run away?
+(type 'fight' or 'flee').""".format(monster_to_fight))
+    valid_input = False
+    while not valid_input:
+        if fight_or_flight == 'fight':
+            if "healing sword" in Inventory.weapons:
+                if Inventory.health < Inventory.max_health:
+                    Inventory.health = Inventory.health + 1
+            monster_to_fight.health -= Inventory.attack
+            Inventory.Inventory().health -= monster_to_fight.damage
+            if monster_to_fight.health <= 0:
+                modify_gold(monster_to_fight.loot)
+                print("You defeated the {} and\
+                     earned four gold!".format(monster_to_fight))
+                valid_input = True
+            elif monster_to_fight.health > 0:
+                monster_outcome(monster_to_fight)
+                valid_input = True
+        elif fight_or_flight == 'flee':
+            gold_stolen = random.choice(range(1, 4))
+            if Inventory.gold >= gold_stolen:
+                gold_stolen = 0 - gold_stolen
+                modify_gold(gold_stolen)
+                print("The {} stole some gold!".format(monster_to_fight))
+            print("You ran away!")
+            valid_input = True
+        else:
+            print("Invalid input!")
 
 
-def goblin_outcome():
-    """If the player doesn't have enough attack to defeat the goblin"""
-    goblin_health = 4 - Inventory.attack
+def monster_outcome(monster):
+    """If the player doesn't have enough attack to defeat the monster"""
     valid_input = False
     fight_or_flight = input("""You don't have enough attack!
-Do you want to flee or take damage to defeat the goblin?
-(type 'flee' or 'take damage')""")
+Do you want to flee or take damage to defeat the {}?
+(type 'flee' or 'take damage').""".format(monster))
     while not valid_input:
         if fight_or_flight == "flee":
             gold_stolen = random.choice(range(1, 4))
             if Inventory.gold >= gold_stolen:
                 gold_stolen = 0 - gold_stolen
                 modify_gold(gold_stolen)
-                print("The goblin stole some gold!")
-            print("You ran away from the goblin!")
+                print("The {} stole some gold!".format(monster))
+            print("You ran away from the {}!".format(monster))
             valid_input = True
         elif fight_or_flight == "take damage":
             # Using your health to defeat the goblin
-            Inventory.health = Inventory.health - goblin_health
+            Inventory.health = Inventory.health - monster.health
             if Inventory.health > 0:
                 modify_gold(5)
-                print("You defeated the goblin and earned five gold!")
+                print("You defeated the\
+                      {} and earned five gold!".format(monster))
             # If you try to use your health but don't have enough:
             elif Inventory.health <= 0:
-                print("You can't beat the goblin!")
+                print("You can't beat the {}!".format(monster))
             valid_input = True
         else:
             fight_or_flight = input("Please type 'flee' or 'take damage'.")

@@ -88,5 +88,9 @@ v1.7 (Different assignment):
 - Bug fixes
 - Checked python style
 
+v1.8
+- Added monster classes
+- Bug fixes
+
 ====================================================================
 >>>>>>> origin/main

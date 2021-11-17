@@ -11,25 +11,18 @@ column = 2
 print_command = 0
 
 
-def update_game_map():
-    """Generating and printing game map based on location_list_2"""
-    global location_list2
-    global print_command
-    game_map = """
-+--------------------------------------------------------------------------+
-| {}""".format(location_list2[0][0]) + " | {}".format(location_list2[0][1]) + " | {}".format(location_list2[0][2]) + " | {}".format(location_list2[0][3]) + " | {} |".format(location_list2[0][4]) + """
-+--------------------------------------------------------------------------+
-| {}""".format(location_list2[1][0]) + " | {}".format(location_list2[1][1]) + " | {}".format(location_list2[1][2]) + " | {}".format(location_list2[1][3]) + " | {} |".format(location_list2[1][4]) + """
-+--------------------------------------------------------------------------+
-| {}""".format(location_list2[2][0]) + " | {}".format(location_list2[2][1]) + " | {}".format(location_list2[2][2]) + " | {}".format(location_list2[2][3]) + " | {} |".format(location_list2[2][4]) + """
-+--------------------------------------------------------------------------+
-| {}""".format(location_list2[3][0]) + " | {}".format(location_list2[3][1]) + " | {}".format(location_list2[3][2]) + " | {}".format(location_list2[3][3]) + " | {} |".format(location_list2[3][4]) + """
-+--------------------------------------------------------------------------+
-| {}""".format(location_list2[4][0]) + " | {}".format(location_list2[4][1]) + " | {}".format(location_list2[4][2]) + " | {}".format(location_list2[4][3]) + " | {} |".format(location_list2[4][4]) + """
-+--------------------------------------------------------------------------+"""
-    # The print command is only equal to 0 when the user selects action 4
-    if print_command == 0:
-        print(game_map)
+class Map:
+    """Generating and printing a map"""
+    def __init__(self, map_tiles):
+        self.map_tiles = map_tiles
+
+    def __str__(self):
+        return self.map_tiles
+
+
+def update_map():
+    game_map.map_tiles = full_map
+    print(game_map)
 
 # location_list2 will be reevaluated as this list
 # There are extra spaces so the game map looks nice
@@ -61,6 +54,22 @@ location_list2 = [
         "   Monster  ", "    Gold    "]
 ]
 
+full_map = """
++--------------------------------------------------------------------------+
+| {}""".format(location_list2[0][0]) + " | {}".format(location_list2[0][1]) + " | {}".format(location_list2[0][2]) + " | {}".format(location_list2[0][3]) + " | {} |".format(location_list2[0][4]) + """
++--------------------------------------------------------------------------+
+| {}""".format(location_list2[1][0]) + " | {}".format(location_list2[1][1]) + " | {}".format(location_list2[1][2]) + " | {}".format(location_list2[1][3]) + " | {} |".format(location_list2[1][4]) + """
++--------------------------------------------------------------------------+
+| {}""".format(location_list2[2][0]) + " | {}".format(location_list2[2][1]) + " | {}".format(location_list2[2][2]) + " | {}".format(location_list2[2][3]) + " | {} |".format(location_list2[2][4]) + """
++--------------------------------------------------------------------------+
+| {}""".format(location_list2[3][0]) + " | {}".format(location_list2[3][1]) + " | {}".format(location_list2[3][2]) + " | {}".format(location_list2[3][3]) + " | {} |".format(location_list2[3][4]) + """
++--------------------------------------------------------------------------+
+| {}""".format(location_list2[4][0]) + " | {}".format(location_list2[4][1]) + " | {}".format(location_list2[4][2]) + " | {}".format(location_list2[4][3]) + " | {} |".format(location_list2[4][4]) + """
++--------------------------------------------------------------------------+"""
+
+
+game_map = Map(full_map)
+
 
 def reset_location_list():
     """Resetting the "You're here" tiles to the original location_list"""
@@ -78,7 +87,7 @@ def player_location():
         Locations.modify_gold(random.choice(range(1, 4)))
     elif location_list[row][column] == "   Monster  ":
         print(Locations.locations["Monster"])
-        Locations.fight_goblin()
+        Locations.fight_monster()
     elif location_list[row][column] == "    Witch   ":
         Locations.witch()
     elif location_list[row][column] == "   Market   ":
@@ -129,6 +138,5 @@ def move_choice():
             print_command = 1
             player_location()
             location_list2[row][column] = " You're here"
-            update_game_map()
             print_command = 0
             valid_input = True

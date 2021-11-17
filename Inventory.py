@@ -7,7 +7,7 @@ import Map
 potions = 0
 elixirs = 0
 weapons = []
-gold = 100
+gold = 0
 health = 2
 max_health = 2
 attack = 0
@@ -104,7 +104,7 @@ class Inventory:
         self.max_health = max_health
 
 classes = [RustyKnife(), PocketKnife(), Dagger(), RustyBroadsword(),
-           Broadsword(),"", Potion(), Elixir()]
+           Broadsword(), "", Potion(), Elixir()]
 
 party = []
 
@@ -210,7 +210,7 @@ options = "1. Explore", "2. See inventory", "3. Heal", "4. See map", "5. Quit"
 
 def gameplay():
     """Funciton that starts gameplay and inputs player choices"""
-    while True:
+    while health > 0:
         for choice in options:
             print(choice)
         try:
@@ -222,7 +222,7 @@ def gameplay():
             elif player_choice == 3:
                 Inventory().potions = use_potions()
             elif player_choice == 4:
-                Map.update_game_map()
+                Map.update_map()
             elif player_choice == 5:
                 print("Thanks for playing!")
                 break
@@ -231,7 +231,5 @@ def gameplay():
         except ValueError:
             print("""Invalid input!
 Please press a number for your chosen action.""")
-        if Inventory().health <= 0:
-            print("You're out of health!")
-            print("GAME OVER")
-            break
+    print("You're out of health!")
+    print("GAME OVER")
